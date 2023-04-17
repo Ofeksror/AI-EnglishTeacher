@@ -10,10 +10,10 @@ const Recorder: React.FC = () => {
   // Gets Called when we press save on the recording
   const addAudioElement = (blob: Blob) => {
     let url = URL.createObjectURL(blob);
-    console.log(url)
-    setAudioRec(url);
-    console.log(blob); // -> Blob { size: 23046, type: "audio/ogg; codecs=opus" }
-    // transcribeRecording(blob);
+    // console.log(url)
+    // setAudioRec(url);
+    // console.log(blob); // -> Blob { size: 23046, type: "audio/ogg; codecs=opus" }
+    transcribeRecording(blob);
   };
 
   return (
