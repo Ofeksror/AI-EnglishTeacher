@@ -16,16 +16,16 @@ const configuration = new Configuration({
 
 const openai = new OpenAIApi(configuration);
 
-const transcribeRecording = async (oggBlob: Blob) => {
-    console.log(oggBlob.type);
+const transcribeRecording = async (audioBlob: Blob) => {
+    /*console.log(oggBlob.type);
     const audioBlob = convertOggToMp3(oggBlob);
-    console.log(typeof(audioBlob));
-    /*
-    const audioFile = new File([audioBlob], 'recording.oog', { type: audioBlob.type });
+    console.log(typeof(audioBlob)); */
+    
+    const audioFile = new File([audioBlob], 'recording.mpeg', { type: audioBlob.type });
     console.log(audioFile);
-    const response = await openai.createTranscription(audioFile, 'whisper-1');
+    // const response = await openai.createTranscription(audioFile, 'whisper-1');
     console.log(response.data);
-    */
+    
     // // return response.data;
 }
 
