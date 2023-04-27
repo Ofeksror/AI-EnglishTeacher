@@ -1,0 +1,32 @@
+:root {
+    /* */
+}
+
+.video-container {
+    /* */
+}
+
+.corrections-container {
+    /* */
+}
+
+.translator-container {
+    /* */
+}
+
+.recorder-container {
+    /* */
+}
+
+nav {
+    /* */
+}
+
+nav a {
+    color: black;
+    text-decoration: none;
+}
+
+nav a.active-link {
+    color: red;
+}
