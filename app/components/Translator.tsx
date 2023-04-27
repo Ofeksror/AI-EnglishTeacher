@@ -1,6 +1,6 @@
 'use client';
 import React from 'react'
-import test from '@/utils/test';
+import test from '@/old/test';
 
 const Translator: React.FC = () => {
   return (

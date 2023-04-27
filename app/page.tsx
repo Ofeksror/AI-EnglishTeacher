@@ -11,8 +11,8 @@ export default function Home() {
         <VideoCamera />
       </div>
       <div>
-        <Corrections />
-        <Translator />
+        { /* <Corrections />  */ }
+        { /* <Translator /> */ }
         <Recorder />
       </div>
     </div>

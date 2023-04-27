@@ -1,5 +1,5 @@
 import { Configuration, OpenAIApi } from 'openai';
-import convertOggToMp3 from './convertOggToMp3';
+import convertOggToMp3 from '../old/convertOggToMp3';
 
 // Solves an issue: TypeError: localVarFormParams.getHeaders is not a function
 // solution from https://github.com/openai/openai-node/issues/75
