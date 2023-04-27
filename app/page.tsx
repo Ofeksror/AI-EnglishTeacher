@@ -1,7 +1,5 @@
 import VideoCamera from "./components/VideoCamera"
-import Corrections from "./components/Corrections"
-import Translator from "./components/Translator"
-import Recorder from "./components/Recorder"
+import Utilities from "./components/Utilities"
 
 export default function Home() {
   return (
@@ -10,11 +8,7 @@ export default function Home() {
         <VideoCamera />
         <VideoCamera />
       </div>
-      <div>
-        { /* <Corrections />  */ }
-        { /* <Translator /> */ }
-        <Recorder />
-      </div>
+      <Utilities />
     </div>
   )
 }
