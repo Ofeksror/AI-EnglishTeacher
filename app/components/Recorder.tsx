@@ -2,9 +2,9 @@
 import { useEffect } from 'react';
 
 interface Props {
-    startRecording: any;
-    pauseRecording: any;
-    stopRecording: any;
+    startRecording: () => Promise<void>;
+    stopRecording: () => Promise<void>;
+    pauseRecording: () => Promise<void>;
 }
 
 const Recorder: React.FC<Props> = ({ startRecording, pauseRecording, stopRecording }) => {

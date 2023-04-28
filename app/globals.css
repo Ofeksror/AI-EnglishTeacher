@@ -30,3 +30,25 @@ nav a {
 nav a.active-link {
     color: red;
 }
+
+.translator-container {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    flex-wrap: wrap;
+    flex-direction: row;
+}
+
+.mainDiv {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 10vh;
+}
+
+img {
+    width: 30vh;
+    height: 20vh;
+
+}

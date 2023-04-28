@@ -4,9 +4,17 @@ import test from '@/old/test';
 
 const Translator: React.FC = () => {
   return (
-    <div className='translator-container'>
-        <button onClick={test}>Click Here</button>
-    </div>
+    <>
+      <h1>Translator</h1>
+      <div className='translator-container'>
+        <div className='original'>
+          <input type="text"></input>
+        </div>
+        <div className='destination'>
+          <input type="text"></input>
+        </div>
+      </div>
+    </>
   )
 }
 

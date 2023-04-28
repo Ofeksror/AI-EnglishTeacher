@@ -1,13 +1,13 @@
 import VideoCamera from "./components/VideoCamera"
 import Utilities from "./components/Utilities"
 
-export default function Home() {
+export default function Homepage() {
   return (
-    <div>
-      <div>
+    <div className="mainDiv">
+      <main>
         <VideoCamera />
         <VideoCamera />
-      </div>
+      </main>
       <Utilities />
     </div>
   )
