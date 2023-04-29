@@ -1,5 +1,5 @@
 'use client'
-import { continueConversation, getInitialResponse, initializeConversation } from '@/utils/englishResponse';
+import { continueConversation, initializeConversation } from '@/utils/englishResponse';
 import React, { useState } from 'react'
 import { useRef } from 'react'
 import { Message } from '@/utils/types';
@@ -10,12 +10,12 @@ const Tester = () => {
     
     const [ response, setResponse ] = useState<Message>(null);
 
-    let isFirstResponse: boolean = true;
+    const [isFirstResponse, setFirstResponse] = useState(true);
 
     const handleClick = async () => {
         // Submit to the AI
         if (isFirstResponse) {
-            isFirstResponse = false;
+            setFirstResponse(false);
             try {
                 const respMessage = await initializeConversation(message);
                 setResponse(respMessage as Message);
@@ -23,9 +23,9 @@ const Tester = () => {
                 console.error('Error while getting response:', error);
             }
         }
-
         else {
             try {
+                console.log("Calling continueConversation");
                 const respMessage = await continueConversation(message);
                 setResponse(respMessage as Message);
             } catch (error) {

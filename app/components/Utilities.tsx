@@ -17,7 +17,7 @@ const Utilities: React.FC = () => {
     const {
         recording, speaking, transcribing, transcript, pauseRecording, startRecording, stopRecording,
     } = useWhisper({
-        apiKey: "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",
+        apiKey: "",
         whisperConfig: { language: 'en', },
         removeSilence: true,
     })
