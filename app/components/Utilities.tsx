@@ -4,15 +4,11 @@ import { useWhisper } from '@chengsokdara/use-whisper'
 import Translator from './Translator'
 import Recorder from './Recorder'
 import Corrections from './Corrections'
+import { Message } from '@/utils/types'
+
+import Tester from './Tester'
 
 import { getResponse, getInitialResponse } from '@/utils/englishResponse'
-
-interface Message {
-    isUser: boolean;
-    message: string;
-    corrections?: any[]; // Update to either a string or an HTML component
-    improvements?: any[]; // Update to either a string or an HTML component
-}
 
 const Utilities: React.FC = () => {
     const initialRender = useRef(true);
@@ -21,7 +17,7 @@ const Utilities: React.FC = () => {
     const {
         recording, speaking, transcribing, transcript, pauseRecording, startRecording, stopRecording,
     } = useWhisper({
-        apiKey: "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",
+        apiKey: "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",
         whisperConfig: { language: 'en', },
         removeSilence: true,
     })
@@ -39,7 +35,7 @@ const Utilities: React.FC = () => {
         // Send transcript to ChatGPT
         if (messages.length == 0) { 
             // Add transcript to messages array
-
+            
             // Initialize conversation with AI
             const promise = getInitialResponse(transcript.text);
             promise.then((response) => {
@@ -63,6 +59,7 @@ const Utilities: React.FC = () => {
             <Corrections transcript={transcript}/>
             <Translator />
             <Recorder startRecording={startRecording} pauseRecording={pauseRecording} stopRecording={stopRecording} />
+            <Tester />
         </aside>
     )
 }
