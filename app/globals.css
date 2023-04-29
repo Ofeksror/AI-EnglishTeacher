@@ -6,10 +6,6 @@
     /* */
 }
 
-.corrections-container {
-    /* */
-}
-
 .translator-container {
     /* */
 }
@@ -51,4 +47,18 @@ img {
     width: 30vh;
     height: 20vh;
 
+}
+
+.chat-message {
+    border: 1px solid red;
+    border-radius: 5%;
+    padding: 5%;
+}
+
+.chat-message right {
+    direction: rtl;
+}
+
+.chat-message left {
+    color: red;
 }

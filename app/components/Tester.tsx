@@ -1,11 +1,12 @@
 'use client'
-import { continueConversation, initializeConversation } from '@/utils/englishResponse';
+import { getMessageResponse, messagesHistory } from '@/utils/englishResponse';
 import React, { useState } from 'react'
 import { useRef } from 'react'
 import { Message } from '@/utils/types';
 
 const Tester = () => {
 
+    /* 
     const [ message, setMessage ] = useState("");
     
     const [ response, setResponse ] = useState<Message>(null);
@@ -33,6 +34,7 @@ const Tester = () => {
             }
         }
     }
+    
 
 
     return (
@@ -52,6 +54,24 @@ const Tester = () => {
             </div>
             }  
         </div>
+  )
+
+  */
+
+    const [ message, setMessage ] = useState("");
+    const handleClick = async () => {
+        // Submit to the AI
+        getMessageResponse(message);
+    }
+
+  return (
+    <div>
+        <input type='text'
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}>
+        </input>
+        <button onClick={handleClick}>Submit</button>
+    </div>
   )
 }
 

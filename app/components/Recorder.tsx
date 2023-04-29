@@ -1,13 +1,29 @@
 'use client';
-import { useEffect } from 'react';
+import useWhisper from '@chengsokdara/use-whisper';
+import { useEffect, useRef } from 'react';
+import { getMessageResponse } from '@/utils/englishResponse';
 
-interface Props {
-    startRecording: () => Promise<void>;
-    stopRecording: () => Promise<void>;
-    pauseRecording: () => Promise<void>;
-}
+const Recorder: React.FC = () => {
+    const initialRender = useRef(true);
+    
+    const {
+        recording, speaking, transcribing, transcript, pauseRecording, startRecording, stopRecording,
+    } = useWhisper({
+        apiKey: "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",
+        whisperConfig: { language: 'en', },
+        removeSilence: true,
+    })
+    
+    useEffect(() => {
+        // Ignore initial rencder
+        if (initialRender.current) {
+            initialRender.current = false;
+            return;
+        }
 
-const Recorder: React.FC<Props> = ({ startRecording, pauseRecording, stopRecording }) => {
+        getMessageResponse(transcript.text);
+    }, [transcript])
+
     return (
         <div className='translator-container'>
             <button onClick={() => startRecording()}>Start</button>

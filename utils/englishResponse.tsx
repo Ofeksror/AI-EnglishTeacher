@@ -1,5 +1,7 @@
 import { ChatCompletionRequestMessage, Configuration, OpenAIApi } from 'openai';
 import { Message } from './types';
+import { useState } from 'react';
+import Chat from '@/app/components/Chat';
 
 // Solves an issue: TypeError: localVarFormParams.getHeaders is not a function
 // solution from https://github.com/openai/openai-node/issues/75
@@ -10,7 +12,7 @@ class CustomFormData extends FormData {
 }
 
 const configuration = new Configuration({
-    apiKey: "",
+    apiKey: "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",
     formDataCtor: CustomFormData,
 })
 
@@ -32,94 +34,66 @@ const prompt: string = `
 
     The user's message: `
 
-// const messagesHistory: APIMessage[] = [];
-const messagesHistory: ChatCompletionRequestMessage[] = [];
+export const messagesHistory: Message[] = [];
+const contextHistory: ChatCompletionRequestMessage[] = [];
 
-export const initializeConversation = async (message: string) => {
-    messagesHistory.push({
-        role: 'user',
-        content: `${ prompt } "${ message }"`,
-        name: 'user'
-    } as ChatCompletionRequestMessage)
-
-    console.log(messagesHistory);
+export const getMessageResponse = async (message: string) => {
+    if (messagesHistory.length == 0) {
+        messagesHistory.push({
+            role: 'user',
+            name: 'user',
+            content: message,
+            isUser: true,
+        } as Message)
+        contextHistory.push({
+            role: 'user',
+            name: 'user',
+            content: `${ prompt } "${ message }"`,
+        } as ChatCompletionRequestMessage)
+    }
+    else {
+        messagesHistory.push({
+            role: 'user',
+            name: 'user',
+            content: message,
+            isUser: true,
+        } as Message)
+        contextHistory.push({
+            role: 'user',
+            name: 'user',
+            content: message,
+        } as ChatCompletionRequestMessage)
+    }
     
     return await openai.createChatCompletion({
         model: "gpt-3.5-turbo",
-        messages: messagesHistory,
+        messages: contextHistory,
         max_tokens: 500,
         temperature: 0.7,
         })
         .then((response) => {
-
-            console.log({response});
-            
-            let parsedJSON;
-
             try {
-                parsedJSON = JSON.parse(response.data.choices[0].message.content);
+                const parsedJSON = JSON.parse(response.data.choices[0].message.content);
+
+                // Add response to message history for context
+                messagesHistory.push({
+                    role: 'user',
+                    name: 'you',
+                    isUser: false,
+                    ...parsedJSON
+                } as Message);
+                contextHistory.push({
+                    role: 'user',
+                    name: 'you',
+                    content: parsedJSON.content,
+                } as ChatCompletionRequestMessage)
+                
+
+                console.log(messagesHistory);
             } catch (err) {
-                console.log(`ERROR: ${err}`);
+                console.error(`ERROR: ${err}`);
+                return;
             }
-
-            const respMessage: Message = {
-                isUser: false,
-                ...parsedJSON
-            } as Message;
-            
-            // Add response to message history for context
-            messagesHistory.push({
-                'role': 'user',
-                'content': response.data.choices[0].message.content, // The response is still formatted in json as a string
-                'name': "you" // Name of GPT (might change later)
-            } as ChatCompletionRequestMessage);
-            
-            console.log(messagesHistory)
-            
-            return respMessage;
-        })
-        .catch((error) => {
-            console.error(error);
-        })
-}
-    
-
-export const continueConversation = async (message: string) => {
-    console.log("Called continueConversation");
-    console.log(message);
-    console.log(messagesHistory);
-        
-    messagesHistory.push({
-        role: 'user',
-        content: message,
-        name: 'user'
-    } as ChatCompletionRequestMessage)
-    
-    return await openai.createChatCompletion({
-        model: "gpt-3.5-turbo",
-        messages: messagesHistory,
-        max_tokens: 500,
-        temperature: 0.7,
-        })
-        .then((response) => {
-            console.log("response: ");
-            console.log(response);
-
-            const respMessage: Message = {
-                isUser: false,
-                ...JSON.parse(response.data.choices[0].message.content)
-            } as Message;
-            
-            // Add response to message history for context
-            messagesHistory.push({
-                'role': 'user',
-                'content': response.data.choices[0].message.content,
-                'name': "you" // Name of GPT (might change later)
-            } as ChatCompletionRequestMessage);
-
-            console.log(messagesHistory)
-
-            return respMessage;
         })
         .catch((error) => {
             console.error(error);
