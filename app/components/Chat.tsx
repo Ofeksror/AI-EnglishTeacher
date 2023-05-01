@@ -1,28 +1,21 @@
 'use client'
-import React, { useEffect, useState } from 'react'
-import { Message } from '@/utils/types';
-import { messagesHistory } from '@/utils/englishResponse';
+import React from 'react'
 
-
-interface Props {
-
-}
-
-const Chat: React.FC<Props> = ({}) => {
+const Chat: React.FC = () => {
     
-    const messages = messagesHistory;
-
-    const [ history, setHistory ] = useState<Message[]>();
-
-
+    // const { messages } = useChatContext();
+    // const messages = [{content: "hey"}, {content: "bye"}];
 
     return (
         <div className='chat-container' style={{border: '2px solid black', borderRadius: '20px', padding: '30px'}}>
-            {
-                history.map((message, index) => (
-                    <div key={index}>{message.content}</div>
+            { /*
+                messages.map((message, index) => (
+                    <div key={index}>
+                         {message.content}}
+                    </div>
                 ))
-            }
+                */ }
+            2
         </div>
     )
 }

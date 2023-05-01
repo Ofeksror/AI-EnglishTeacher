@@ -8,11 +8,12 @@ const Utilities: React.FC = () => {
     return (
         <aside>
             <Chat />
-            <Translator />
             <Recorder />
             <Tester />
         </aside>
     )
 }
+
+/* <Translator /> */
 
 export default Utilities;
