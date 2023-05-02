@@ -16,7 +16,7 @@ class CustomFormData extends FormData {
 }
 
 const configuration = new Configuration({
-    apiKey: "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",
+    apiKey: "",
     formDataCtor: CustomFormData,
 })
 
@@ -44,27 +44,107 @@ ALWAYS structure your responses in the following JSON format. Do not include any
         "improvement 1"
     ]
 }
-The arrays can be empty if there are no corrections or improvements to note.
+The arrays should be empty if there are no corrections or improvements to note.
 Avoid repeating yourself in both parts.
 
 The user's message you need to respond to:
 `
 
 const Recorder: React.FC = () => {
+    // Initial Setup
     const initialRender = useRef(true);
     
     const {
         recording, speaking, transcribing, transcript, pauseRecording, startRecording, stopRecording,
     } = useWhisper({
-        apiKey: "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",
+        apiKey: "",
         whisperConfig: { language: 'en', },
         removeSilence: true,
     })
-    
     const { speak } = useSpeechSynthesis();
-    
     const { messages, addMessage } = useChat();
 
+    // Generate conversation for testing.
+    useEffect(() => {
+        addMessage({
+            role: 'user',
+            name: 'user',
+            content: 'Hello GPT!',
+            isUser: true,
+        })
+
+        addMessage({
+            role: 'user',
+            name: 'you',
+            content: 'Hello dear student! How are you doing today?\nMy name is GPT, I am your teacher for today :)',
+            isUser: false,
+            corrections: [
+            ],
+            improvements: [
+            ],
+        })
+
+        addMessage({
+            role: 'user',
+            name: 'user',
+            content: 'That\'s great to hear, I\'ve always wanted a personal teacher to teach me the English.',
+            isUser: true,
+        })
+        
+        addMessage({
+            role: 'user',
+            name: 'you',
+            content: 'Well, what is your name dear?',
+            isUser: false,
+            corrections: [
+                "I always wanted instead of I've always wanted",
+                "Say: to teach me English instead of to teach me *the* English"
+            ],
+            improvements: [
+            ],
+        })
+
+        addMessage({
+            role: 'user',
+            name: 'user',
+            content: 'My name\'s Ofek. What should we talk about today?',
+            isUser: true,
+        })
+
+        addMessage({
+            role: 'user',
+            name: 'you',
+            content: 'Whatever you wish to talk about, Ofek! What are your hobbies?',
+            isUser: false,
+            corrections: [
+                "Say: my name *is* instead of *my name's*"
+            ],
+            improvements: [
+            ],
+        })
+
+        addMessage({
+            role: 'user',
+            name: 'user',
+            content: 'I like my hobbies playing video games, watching movies.',
+            isUser: true,
+        })
+
+        addMessage({
+            role: 'user',
+            name: 'you',
+            content: 'Oh movies! What kind of movies do you like?',
+            isUser: false,
+            corrections: [  
+            ],
+            improvements: [
+                "I like to ... instead of I like my hobbies",
+                "Say: playing video games *and* watching movies instead of playing video games, watching movies"
+            ]
+        })
+    }, [])
+
+    // Handle new recordings
     useEffect(() => {
         // Ignore initial render
         if (initialRender.current) {
@@ -134,29 +214,6 @@ const Recorder: React.FC = () => {
             })
     }
 
-    /*
-
-    const [ liveMessage, setLiveMessage ] = useState<string>('');
-
-    const handleClick = () => {
-        contextHistory.push({
-            role: 'user',
-            name: 'user',
-            content: (messages.length === 0) ? `${ prompt } "${ liveMessage }"` : `${liveMessage}`,
-        } as ChatCompletionRequestMessage)
-
-        addMessage({
-            role: 'user',
-            name: 'user',
-            content: liveMessage,
-            isUser: true,
-        } as Message);
-        
-        getResponse();
-    }
-
-    */
-
     return (
         <>
             <div className='translator-container'>
@@ -167,15 +224,5 @@ const Recorder: React.FC = () => {
         </>
     )
 }
-
-/*
-            {<div>
-                <input type='text'
-                value={liveMessage}
-                onChange={(e) => setLiveMessage(e.target.value)}>
-                </input>
-                <button onClick={handleClick}>Submit</button>
-            </div>}
-*/
 
 export default Recorder;
