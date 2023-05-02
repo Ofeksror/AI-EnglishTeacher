@@ -6,10 +6,6 @@
     /* */
 }
 
-.corrections-container {
-    /* */
-}
-
 .translator-container {
     /* */
 }
@@ -28,5 +24,41 @@ nav a {
 }
 
 nav a.active-link {
+    color: red;
+}
+
+.translator-container {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    flex-wrap: wrap;
+    flex-direction: row;
+}
+
+.mainDiv {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 10vh;
+}
+
+img {
+    width: 30vh;
+    height: 20vh;
+
+}
+
+.chat-message {
+    border: 1px solid red;
+    border-radius: 5%;
+    padding: 5%;
+}
+
+.chat-message right {
+    direction: rtl;
+}
+
+.chat-message left {
     color: red;
 }
