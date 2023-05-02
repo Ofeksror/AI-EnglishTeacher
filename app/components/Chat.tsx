@@ -17,33 +17,42 @@ const Chat: React.FC = () => {
                 {messages.map((message, index) => {
                     if (message.isUser) {
                         return (
-                            <div className={`${styles.chatMessage} ${styles.right}`} key={index}>
+                            <div className={`${styles.chatMessage} ${styles.right}`} key={index + "user"}>
                                 <p>{message.content}</p>
                             </div>
                         )
                     }
                     else {
                         return (
-                            <div className={`${styles.chatMessage} ${styles.left}`} key={index}>
-                                <p>{message.content}</p>
-
-                                {message.corrections.length > 0 && <p className={styles.listHeader}>Corrections:</p>}
-                                <ul>
-                                    {
-                                        message.corrections.map((correction, index) => (
-                                            <li key={index}><span>{correction}</span></li>
-                                            ))
-                                        }
-                                </ul>
-                                {message.improvements.length > 0 && <p className={styles.listHeader}>Improvements:</p>}
-                                <ul>
-                                    {
-                                        message.improvements.map((improvement, index) => (
-                                            <li key={index}><span>{improvement}</span></li>
-                                        ))
-                                    }
-                                </ul>
-                            </div>
+                            <>
+                                <div className={`${styles.chatMessage} ${styles.left}`} key={index + "gpt"}>
+                                    <p>{message.content}</p>
+                                </div>
+                                { ((message.corrections) && (message.corrections.length > 0)) &&
+                                    <div className={`${styles.chatNote} ${styles.left}`} key={index + "crct"}>
+                                        <p className={styles.listHeader}>Corrections:</p>
+                                        <ul>
+                                            {
+                                                message.corrections.map((correction, index) => (
+                                                    <li key={index}><span>{correction}</span></li>
+                                                    ))
+                                                }
+                                        </ul>
+                                    </div>
+                                }
+                                { ((message.improvements) && (message.improvements.length > 0)) &&
+                                    <div className={`${styles.chatNote} ${styles.left}`} key={index + "impr"}>
+                                        {message.improvements.length > 0 && <p className={styles.listHeader}>Improvements:</p>}
+                                        <ul>
+                                            {
+                                                message.improvements.map((improvement, index) => (
+                                                    <li key={index}><span>{improvement}</span></li>
+                                                ))
+                                            }
+                                        </ul>
+                                    </div>
+                                }
+                            </>
                         )
                     }
                 })}

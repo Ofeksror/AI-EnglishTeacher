@@ -14,15 +14,11 @@ const RootLayout = ({children}: {children: React.ReactNode}) => {
   return (
     <html lang="en">
       <body className={openSans.className}>
-
-        <header>
-          <Navbar />
-        </header>
-        <main>
-          <ChatContextProvider>
-            {children}
-          </ChatContextProvider>
-        </main>
+        <Navbar />
+        
+        <ChatContextProvider>
+          {children}
+        </ChatContextProvider>
         
       </body>
     </html>

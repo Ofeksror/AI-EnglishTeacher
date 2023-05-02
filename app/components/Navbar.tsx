@@ -2,20 +2,21 @@
 
 import Link from 'next/link';
 import { usePathname  } from 'next/navigation';
-import React from 'react'
+import React, { useEffect } from 'react'
+import styles from './Navbar.module.css';
 
 
 
 const Navbar: React.FC = () => {
     
-    const currentPath = usePathname()
+    const currentPath = usePathname();
 
     return (
-        <nav className='navbar'>
-            <ul>
-                <li><Link href='/' className={currentPath === '/' ? 'active-link' : ''}>Home</Link></li>
-                <li><Link href='/about' className={currentPath === '/about' ? 'active-link' : ''}>About</Link></li>
-            </ul>
+        <nav className={styles.navbar}>
+            <div>
+                <span className={currentPath == '/' ? styles.activeLink : styles.link}><Link href='/'>Home</Link></span>
+                <span className={currentPath == '/about' ? styles.activeLink : styles.link}><Link href='/about'>About</Link></span>
+            </div>
         </nav>
   )
 }

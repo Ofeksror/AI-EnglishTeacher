@@ -4,7 +4,10 @@
     width: 60%;
     height: 60vh;
     padding: 2em 0 2em 0;
-    overflow: scroll;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    scrollbar-width: thin;
+    scrollbar-color: rgb(64, 224, 104) rgb(224, 224, 224); 
 }
 
 .messagesList {
@@ -21,9 +24,20 @@
     position: relative;
 }
 
+.chatNote {
+    display: block;
+    margin: -0.75em auto 0em auto;
+    width: fit-content;
+    max-width: 55%;
+    border-radius: 1em;
+    text-align: left;
+    position: relative;
+    font-size: 0.9em;
+}
+
 .right {
     margin-right: 2em;
-    background-color: rgb(38, 233, 135);
+    background-color: rgb(64, 224, 104);
     padding: .2em 2.5em .2em 1.5em;
     color: black;
 }
@@ -36,23 +50,22 @@
 
 .listHeader {
     margin-bottom: 0;
-    color: rgb(6, 189, 97);
+    color: rgb(64, 224, 104);
 }
 
-.chatMessage ul {
-    margin-top: 0.25em;
+.chatNote ul {
+    margin-top: 0.3em;
 }
 
-.chatMessage li {
-    list-style: '>';
-    color: rgb(71, 71, 71);
+.chatNote li {
+    list-style: '✓';
+    color: rgb(43, 43, 43);
     margin-bottom: 0.25em;
     position: relative;
     right: 1.5em;
 }
 
-.chatMessage li span {
-    font-size: 1em;
+.chatNote li span {
     color: rgb(71, 71, 71);
     position: relative;
     left: 0.5em;

@@ -1,0 +1,41 @@
+.navbar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4em;
+    background-color: #fff;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+}
+
+.navbar div {
+    background-color: #fff;
+    padding: 0 3em;
+    height: 4em;
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    gap: 5em;
+    flex-direction: row;
+    position: absolute;
+    width: 100%;
+    margin-left: 2em;
+}
+
+.navbar a {
+    text-decoration: none;
+    color: #000;
+    font-size: 1em;
+    transition: 500ms;
+}
+
+.navbar a:hover {
+    color: rgb(12, 69, 92);
+}
+
+.activeLink a {
+    color: rgb(0, 183, 255);
+}
+
+.link a {
+}

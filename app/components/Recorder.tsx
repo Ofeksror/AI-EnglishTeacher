@@ -5,6 +5,7 @@ import { Message, useChat } from '../context/ChatContext';
 import { ChatCompletionRequestMessage, Configuration, OpenAIApi } from 'openai';
 import { useSpeechSynthesis } from 'react-speech-kit';
 
+import styles from './Recorder.module.css';
 import { BiMicrophone, BiStop, BiPause } from 'react-icons/bi';
 
 // Solves an issue: TypeError: localVarFormParams.getHeaders is not a function
@@ -16,7 +17,7 @@ class CustomFormData extends FormData {
 }
 
 const configuration = new Configuration({
-    apiKey: "",
+    apiKey: "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",
     formDataCtor: CustomFormData,
 })
 
@@ -35,13 +36,12 @@ For each message from the user, generate a response that consists of three parts
 Limit the corrections and feedbacks to four items at most, selecting the most important ones if there are more than four.
 ALWAYS structure your responses in the following JSON format. Do not include any text outside of the JSON object.
 {
-    "content": "The reply to the conversation",
+    "content": "YOUR reply to the conversation",
     "corrections": [
-        "correction 1",
-        "correction 2"
+        "correction 1 to my message",
+        "correction 2 to my message"
     ],
     "improvements": [
-        "improvement 1"
     ]
 }
 The arrays should be empty if there are no corrections or improvements to note.
@@ -57,7 +57,7 @@ const Recorder: React.FC = () => {
     const {
         recording, speaking, transcribing, transcript, pauseRecording, startRecording, stopRecording,
     } = useWhisper({
-        apiKey: "",
+        apiKey: "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",
         whisperConfig: { language: 'en', },
         removeSilence: true,
     })
@@ -65,7 +65,7 @@ const Recorder: React.FC = () => {
     const { messages, addMessage } = useChat();
 
     // Generate conversation for testing.
-    useEffect(() => {
+    /* useEffect(() => {
         addMessage({
             role: 'user',
             name: 'user',
@@ -142,7 +142,7 @@ const Recorder: React.FC = () => {
                 "Say: playing video games *and* watching movies instead of playing video games, watching movies"
             ]
         })
-    }, [])
+    }, []) */
 
     // Handle new recordings
     useEffect(() => {
@@ -152,8 +152,11 @@ const Recorder: React.FC = () => {
             return;
         }
 
+        console.log(transcript)
+
         // Ignore empty transcript
-        if (!transcript) {
+        if (!transcript || transcript.text == "" || transcript.text == undefined) {
+            console.log("Empty transcript")
             return;
         }
 
@@ -215,13 +218,13 @@ const Recorder: React.FC = () => {
     }
 
     return (
-        <>
-            <div className='translator-container'>
-                <button onClick={() => startRecording()}>< BiMicrophone /></button>
+        <div className={styles.recordingContainer}>
+            { !recording && <button onClick={() => startRecording()}>< BiMicrophone /></button> }
+            { recording && <>
                 <button onClick={() => pauseRecording()}>< BiPause /></button>
                 <button onClick={() => stopRecording()}>< BiStop /></button>
-            </div>
-        </>
+            </> }
+        </div>
     )
 }
 
