@@ -1,10 +1,11 @@
-import Utilities from "./components/Utilities"
-import { Component } from "react"
+import Chat from "./components/Chat"
+import Recorder from "./components/Recorder"
 
 export default function Homepage() {
   return (
     <div className="mainDiv">
-        <Utilities />
+        <Chat />
+        <Recorder />
     </div>
   )
 }
