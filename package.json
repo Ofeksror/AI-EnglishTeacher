@@ -25,6 +25,9 @@
     "react": "^18.2.0",
     "react-audio-voice-recorder": "^1.0.10",
     "react-dom": "^18.2.0",
+    "react-icons": "^4.8.0",
+    "react-speech-kit": "^3.0.1",
+    "talkify-tts": "^3.9.3",
     "typescript": "5.0.4"
   },
   "devDependencies": {

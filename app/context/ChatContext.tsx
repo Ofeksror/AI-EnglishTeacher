@@ -13,7 +13,7 @@ interface Message extends ChatCompletionRequestMessage {
 
 type ChatContextType = {
     messages: Message[];
-    contextHistory: ChatCompletionRequestMessage[];
+    // contextHistory: ChatCompletionRequestMessage[];
     setMessages: Dispatch<SetStateAction<Message[]>>;
     addMessage: (newMessage: Message) => void;
 };
@@ -26,10 +26,14 @@ interface ChatProviderProps {
 
 const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
     const [messages, setMessages] = useState<Message[]>([]);
-    const contextHistory: ChatCompletionRequestMessage[] = [];
+    // const contextHistory: ChatCompletionRequestMessage[] = [];
+
+    const addMessage = (newMessage: Message) => {
+        setMessages((prevMessages) => [...prevMessages, newMessage]);
+    }
 
     return (
-        <ChatContext.Provider value={{ messages, contextHistory, setMessages}}>
+        <ChatContext.Provider value={{ messages, setMessages, addMessage}}>
             {children}
         </ChatContext.Provider>
     );

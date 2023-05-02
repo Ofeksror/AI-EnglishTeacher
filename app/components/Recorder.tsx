@@ -3,25 +3,56 @@ import useWhisper from '@chengsokdara/use-whisper';
 import { useEffect, useRef, useState } from 'react';
 import { Message, useChat } from '../context/ChatContext';
 import { ChatCompletionRequestMessage, Configuration, OpenAIApi } from 'openai';
+import { useSpeechSynthesis } from 'react-speech-kit';
+
+import { BiMicrophone, BiStop, BiPause } from 'react-icons/bi';
+
+// Solves an issue: TypeError: localVarFormParams.getHeaders is not a function
+// solution from https://github.com/openai/openai-node/issues/75
+class CustomFormData extends FormData {
+    getHeaders() {
+        return {}
+    }
+}
+
+const configuration = new Configuration({
+    apiKey: "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",
+    formDataCtor: CustomFormData,
+})
+
+const openai = new OpenAIApi(configuration);
+
+const contextHistory: ChatCompletionRequestMessage[] = [];
+
+const prompt: string = `
+You are ChatGPT, simulating a friendly conversation with the user to help them improve their English.
+Engage with the user as a friend - ask intresting questions and encourage them to talk about topics they like.
+Your replies would be concise and engaging, and only informative if relevant to the context.
+For each message from the user, generate a response that consists of three parts:
+- A reply to the message of the user and the conversation itself
+- Grammer corrections. Ignore capitalization, punctuations and spelling mistakes.
+- Feedback on the structure of the sentence, word choice or any idioms that could be put to use.
+Limit the corrections and feedbacks to four items at most, selecting the most important ones if there are more than four.
+ALWAYS structure your responses in the following JSON format. Do not include any text outside of the JSON object.
+{
+    "content": "The reply to the conversation",
+    "corrections": [
+        "correction 1",
+        "correction 2"
+    ],
+    "improvements": [
+        "improvement 1"
+    ]
+}
+The arrays can be empty if there are no corrections or improvements to note.
+Avoid repeating yourself in both parts.
+
+The user's message you need to respond to:
+`
 
 const Recorder: React.FC = () => {
     const initialRender = useRef(true);
-
-    // Solves an issue: TypeError: localVarFormParams.getHeaders is not a function
-    // solution from https://github.com/openai/openai-node/issues/75
-    class CustomFormData extends FormData {
-        getHeaders() {
-            return {}
-        }
-    }
-
-    const configuration = new Configuration({
-        apiKey: "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",
-        formDataCtor: CustomFormData,
-    })
-
-    const openai = new OpenAIApi(configuration);
-
+    
     const {
         recording, speaking, transcribing, transcript, pauseRecording, startRecording, stopRecording,
     } = useWhisper({
@@ -29,14 +60,11 @@ const Recorder: React.FC = () => {
         whisperConfig: { language: 'en', },
         removeSilence: true,
     })
-
-    const { messages, contextHistory, setMessages } = useChat();
-
-    useEffect(()=> {
-        console.log(messages);
-        console.log(messages.length);
-    }, [messages])
     
+    const { speak } = useSpeechSynthesis();
+    
+    const { messages, addMessage } = useChat();
+
     useEffect(() => {
         // Ignore initial render
         if (initialRender.current) {
@@ -61,33 +89,15 @@ const Recorder: React.FC = () => {
         contextHistory.push({
             role: 'user',
             name: 'user',
-            content: (messages.length === 0) ? `${ prompt } "${ transcript.text }"` : transcript.text,
+            content: (messages.length === 0) ? `${ prompt } "${ transcript.text }"` : `The message: "${transcript.text}". Remember to answer in JSON`,
         } as ChatCompletionRequestMessage)
 
         // Get response from GPT
         getResponse();
 
     }, [transcript])
-    
-    const prompt: string = `
-        You are ChatGPT, simulating a friendly conversation with a user to help them improve their English language skills. Engage with the user as a friend, discussing various topics, asking interesting questions, and responding to their inquiries. Your replies should not be overly informative unless it is relevant to the context. Provide concise, informative, and engaging replies to the conversation. For each message from the user, generate a response that consists of three parts: a reply to the conversation, grammar corrections, and feedback on sentence structure or word choice. Limit corrections and feedback to four items each, selecting the most important ones if there are more than five. The arrays should be empty if there are no corrections or improvements to note. Avoid repeating yourself in both parts. 
-        Always structure your responses in the following JSON format, and do not include any text outside of the JSON object.
-
-        {
-            "content": "The reply to the conversation",
-            "corrections": [
-                "correction 1",
-                "correction 2"
-            ],
-            "improvements": [
-            ]
-        }
-
-        The user's message: `
 
     const getResponse = async () => {
-        console.log({contextHistory});
-
         return await openai.createChatCompletion({
             model: "gpt-3.5-turbo",
             messages: contextHistory,
@@ -97,21 +107,23 @@ const Recorder: React.FC = () => {
             .then((response) => {
                 // Parse response to JSON
                 try {
+                    console.log(response.data.choices[0].message.content)
                     const parsedResponse = JSON.parse(response.data.choices[0].message.content);
-                    console.log(parsedResponse)
-
-                    addMessage({
-                        role: 'user',
-                        name: 'you',
-                        isUser: false,
-                        ...parsedResponse
-                    } as Message);
                     
                     contextHistory.push({
                         role: 'user',
                         name: 'you',
                         content: parsedResponse.content,
                     } as ChatCompletionRequestMessage)
+                    
+                    addMessage({
+                        role: 'user',
+                        name: 'you',
+                        isUser: false,
+                        ...parsedResponse
+                    } as Message);
+
+                    speak({ text: parsedResponse.content });
                 } catch (err) {
                     console.error(`ERROR: ${err}`);
                     return;
@@ -122,9 +134,17 @@ const Recorder: React.FC = () => {
             })
     }
 
-    const [ liveMessage, setLiveMessage ] = useState('');
+    /*
+
+    const [ liveMessage, setLiveMessage ] = useState<string>('');
 
     const handleClick = () => {
+        contextHistory.push({
+            role: 'user',
+            name: 'user',
+            content: (messages.length === 0) ? `${ prompt } "${ liveMessage }"` : `${liveMessage}`,
+        } as ChatCompletionRequestMessage)
+
         addMessage({
             role: 'user',
             name: 'user',
@@ -132,37 +152,30 @@ const Recorder: React.FC = () => {
             isUser: true,
         } as Message);
         
-        contextHistory.push({
-            role: 'user',
-            name: 'user',
-            content: (messages.length === 0) ? `${ prompt } "${ liveMessage }"` : liveMessage,
-        } as ChatCompletionRequestMessage)
-        
         getResponse();
-        setLiveMessage('');
     }
 
-    const addMessage = (newMessage: Message) => {
-        setMessages((prevMessages) => [...prevMessages, newMessage]);
-    }
+    */
 
     return (
         <>
             <div className='translator-container'>
-                <button onClick={() => startRecording()}>Start</button>
-                <button onClick={() => pauseRecording()}>Pause</button>
-                <button onClick={() => stopRecording()}>Stop</button>
+                <button onClick={() => startRecording()}>< BiMicrophone /></button>
+                <button onClick={() => pauseRecording()}>< BiPause /></button>
+                <button onClick={() => stopRecording()}>< BiStop /></button>
             </div>
-            <div>
-                {/* Tester (keyboard input)*/}
+        </>
+    )
+}
+
+/*
+            {<div>
                 <input type='text'
                 value={liveMessage}
                 onChange={(e) => setLiveMessage(e.target.value)}>
                 </input>
                 <button onClick={handleClick}>Submit</button>
-            </div>
-        </>
-    )
-}
+            </div>}
+*/
 
 export default Recorder;
