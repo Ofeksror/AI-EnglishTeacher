@@ -1,6 +1,6 @@
 import { ChatCompletionRequestMessage, ChatCompletionRequestMessageRoleEnum } from "openai";
 
-export interface Message extends ChatCompletionRequestMessage {
+export interface oldMessage extends ChatCompletionRequestMessage {
     role: ChatCompletionRequestMessageRoleEnum; // 'user'
     name: string;
 

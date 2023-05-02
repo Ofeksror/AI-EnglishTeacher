@@ -1,7 +1,7 @@
-'use client'
 import { ChatCompletionRequestMessage, Configuration, OpenAIApi } from 'openai';
 import { Message } from './types';
-import { useChat } from '@/app/context/ChatContext';
+import { useState } from 'react';
+import Chat from '@/app/components/Chat';
 
 // Solves an issue: TypeError: localVarFormParams.getHeaders is not a function
 // solution from https://github.com/openai/openai-node/issues/75
@@ -34,12 +34,12 @@ const prompt: string = `
 
     The user's message: `
 
-const { messages, addMessage } = useChat();
+export const messagesHistory: Message[] = [];
 const contextHistory: ChatCompletionRequestMessage[] = [];
 
 export const getMessageResponse = async (message: string) => {
-    if (messages.length == 0) {
-        addMessage({
+    if (messagesHistory.length == 0) {
+        messagesHistory.push({
             role: 'user',
             name: 'user',
             content: message,
@@ -52,7 +52,7 @@ export const getMessageResponse = async (message: string) => {
         } as ChatCompletionRequestMessage)
     }
     else {
-        addMessage({
+        messagesHistory.push({
             role: 'user',
             name: 'user',
             content: message,
@@ -76,7 +76,7 @@ export const getMessageResponse = async (message: string) => {
                 const parsedJSON = JSON.parse(response.data.choices[0].message.content);
 
                 // Add response to message history for context
-                addMessage({
+                messagesHistory.push({
                     role: 'user',
                     name: 'you',
                     isUser: false,
@@ -89,7 +89,7 @@ export const getMessageResponse = async (message: string) => {
                 } as ChatCompletionRequestMessage)
                 
 
-                console.log(messages);
+                console.log(messagesHistory);
             } catch (err) {
                 console.error(`ERROR: ${err}`);
                 return;

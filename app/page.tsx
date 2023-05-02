@@ -11,16 +11,3 @@ export default function Homepage() {
     </div>
   )
 }
-/* 
-export default function Homepage() {
-  return (
-    <div className="mainDiv">
-      <main>
-        <VideoCamera />
-        <VideoCamera />
-      </main>
-      <Utilities />
-    </div>
-  )
-}
-*/

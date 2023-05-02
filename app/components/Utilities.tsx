@@ -9,7 +9,7 @@ const Utilities: React.FC = () => {
         <aside>
             <Chat />
             <Recorder />
-            <Tester />
+            {/* <Tester /> */}
         </aside>
     )
 }

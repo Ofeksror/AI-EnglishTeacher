@@ -1,75 +1,44 @@
 'use client'
 import { ChatCompletionRequestMessage, ChatCompletionRequestMessageRoleEnum } from "openai";
-import { ReactNode, createContext, useContext, useState } from "react";
+import { Dispatch, SetStateAction, createContext, useContext, useState } from "react";
 
-export interface Message extends ChatCompletionRequestMessage {
-    role: ChatCompletionRequestMessageRoleEnum; // 'user'
+interface Message extends ChatCompletionRequestMessage {
+    role: ChatCompletionRequestMessageRoleEnum;
     name: string;
-
-    content: string; // mutual
-
+    content: string;
     isUser: boolean;
-    corrections?: any[]; // Update to either a string or an HTML component
-    improvements?: any[]; // Update to either a string or an HTML component
+    corrections?: any[];
+    improvements?: any[];
 }
 
 type ChatContextType = {
     messages: Message[];
-    addMessage: (message: Message) => void;
-}
+    contextHistory: ChatCompletionRequestMessage[];
+    setMessages: Dispatch<SetStateAction<Message[]>>;
+    addMessage: (newMessage: Message) => void;
+};
 
 const ChatContext = createContext<ChatContextType>({} as ChatContextType);
 
-export const useChat = () => {
-    return useContext(ChatContext);
-};
-
-const ChatProvider: React.FC<ChatProviderProps> = ({children}) => {
-    const [ messages, setMessages ] = useState<Message[]>([]);
-    
-    const addMessage = (message: Message) => {
-        setMessages((prevMessages) => [...prevMessages, message]);
-    }
-    
-    return (
-        <ChatContext.Provider value={{ messages, addMessage }}>
-            { children }
-        </ChatContext.Provider>
-    );
+interface ChatProviderProps {
+    children: React.ReactNode;
 }
 
-interface ChatProviderProps {
-    children: ReactNode;
+const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
+    const [messages, setMessages] = useState<Message[]>([]);
+    const contextHistory: ChatCompletionRequestMessage[] = [];
+
+    return (
+        <ChatContext.Provider value={{ messages, contextHistory, setMessages}}>
+            {children}
+        </ChatContext.Provider>
+    );
+};
+
+const useChat = () => {
+    return useContext(ChatContext);
 }
 
 export default ChatProvider;
-
-// export const ChatProvider: React.FC<ChatProviderProps> = ({children}) => {
-//     const [ messages, setMessages ] = useState<Message[]>([]);
-    
-//     const addMessage = (message: Message) => {
-//         setMessages((prevMessages) => [...prevMessages, message]);
-//     }
-    
-//     return (
-//         <ChatContext.Provider value={{ messages, addMessage }}>
-//             { children }
-//         </ChatContext.Provider>
-//     );
-// }
-
-
-
-// export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
-//     const [ messages, setMessages ] = useState<Message[]>([]);
-
-//     const addMessage = (message: Message) => {
-//         setMessages((prevMessages) => [...prevMessages, message]);
-//     }
-
-//     return (
-//         <ChatContext.Provider value={{ messages, addMessage }}>
-//             { children }
-//         </ChatContext.Provider>
-//     )
-// }
+export { useChat };
+export type { Message };

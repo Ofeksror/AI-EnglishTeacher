@@ -1,78 +1,73 @@
 'use client'
-import { getMessageResponse, messagesHistory } from '@/utils/englishResponse';
 import React, { useState } from 'react'
-import { useRef } from 'react'
-import { Message } from '@/utils/types';
+import { useChat } from '../context/ChatContext';
 
 const Tester = () => {
-
-    /* 
-    const [ message, setMessage ] = useState("");
-    
-    const [ response, setResponse ] = useState<Message>(null);
-
-    const [isFirstResponse, setFirstResponse] = useState(true);
-
-    const handleClick = async () => {
-        // Submit to the AI
-        if (isFirstResponse) {
-            setFirstResponse(false);
-            try {
-                const respMessage = await initializeConversation(message);
-                setResponse(respMessage as Message);
-            } catch (error) {
-                console.error('Error while getting response:', error);
-            }
-        }
-        else {
-            try {
-                console.log("Calling continueConversation");
-                const respMessage = await continueConversation(message);
-                setResponse(respMessage as Message);
-            } catch (error) {
-                console.error(error);
-            }
-        }
-    }
-    
-
-
-    return (
-        <div>
-            <input type='text'
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}>
-            </input>
-            <button onClick={handleClick}>Submit</button>
-
-            { response &&
-            <div>
-                <h3>Response</h3>
-                <p> Message: { response.message } </p>
-                <p> Corrections: { response.corrections } </p>
-                <p> Imorovements: { response.improvements } </p>
-            </div>
-            }  
-        </div>
-  )
-
-  */
-
-    const [ message, setMessage ] = useState("");
-    const handleClick = async () => {
-        // Submit to the AI
-        getMessageResponse(message);
-    }
+    const { messages, setMessages } = useChat();
+    const [ liveMessage, setLiveMessage ] = useState('');
 
   return (
     <div>
-        <input type='text'
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}>
+        <p>{messages.map((element) => `|||\t${element.content}\t|||`)}</p>
+        <input value={liveMessage} onChange={(e) => setLiveMessage(e.target.value)}>
         </input>
-        <button onClick={handleClick}>Submit</button>
+        <button onClick={() => setMessages([...messages, {role: 'user', name: 'user', content: liveMessage, isUser: true}])}>Add</button>
     </div>
   )
 }
 
 export default Tester
+
+/*
+
+I need assistance with my code
+I am building a web chat-app using TypeScript, React and NextJS.
+
+The chat is a conversation between the user and AI
+
+I have defined a context object for the state variable that contains a list of the chat messages
+I use it with:
+const { messages, setMessages } = useChat()
+
+I defined a component that has an input field and a button
+Whenever I press the button the input field is added to the list of messages
+I use it with:
+
+const handleClick = () => {
+        addMessage({
+            role: 'user',
+            name: 'user',
+            content: inputContent,
+            isUser: true,
+        } as Message);
+        
+        getResponse();
+        setLiveMessage('');
+    }
+
+const addMessage = (newMessage: Message) => {
+    setMessages([...messages, newMessage])
+}
+
+The code for getResponse:
+const getResponse = () => {
+    const response = getMessageFromAI();
+
+    addMessage({
+        role: 'ai',
+        name: 'ai',
+        content: response, 
+        isUser: false,
+    } as Message);
+}
+
+
+But for some reason the list of messages is not updated properly.
+The first time I press the button the user's message is updated properly.
+But then when the getResponse function is called the list of messages is replaced with the response of the AI
+And then whenever the user adds more messages they keep getting replaced with the ones of the AI
+
+Please help me fix this problem,
+and if further clarification is needed please let me know, I will be happy to provide more code.
+
+*/

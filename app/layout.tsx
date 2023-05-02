@@ -1,7 +1,6 @@
 import Navbar from './components/Navbar'
 import './globals.css'
-
-import { ChatContextProvider } from './context/newChatContext'
+import ChatContextProvider from './context/ChatContext'
 
 export const metadata = {
   title: 'Homepage',

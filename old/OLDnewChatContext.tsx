@@ -23,13 +23,9 @@ type ChatContextType = {
 
 const ChatContext = createContext<ChatContextType>({} as ChatContextType);
 
-// const ChatContextProvider: React.FC<{children: React.ReactNode}> = ({ children }) => {
-    // function ChatContextProvider({ children }) {
-
 interface ChatContextProviderProps {
     children: React.ReactNode;
 }
-
 
 const ChatContextProvider = ({ children }: ChatContextProviderProps) => {
     const [ messages, setMessages ] = useState<Message[]>([]);
@@ -45,9 +41,8 @@ const ChatContextProvider = ({ children }: ChatContextProviderProps) => {
     );
 }
 
-
-const useChatContextNew = function () {
+const useChat = () => {
     return useContext(ChatContext); 
 }
 
-export { ChatContextProvider, useChatContextNew };
+export { ChatContextProvider, useChat };
