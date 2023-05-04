@@ -82,6 +82,7 @@ const Recorder: React.FC = () => {
     const { speak } = useSpeechSynthesis();
     const { messages, addMessage } = useChat();
 
+    /*
     // Generate conversation for testing.
     useEffect(() => {
         addMessage({
@@ -161,6 +162,7 @@ const Recorder: React.FC = () => {
             ]
         })
     }, [])
+    */
 
     // Handle new recordings
     useEffect(() => {
