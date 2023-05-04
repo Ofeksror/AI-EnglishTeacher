@@ -17,7 +17,7 @@ class CustomFormData extends FormData {
 }
 
 const configuration = new Configuration({
-    apiKey: "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",
+    apiKey: process.env.OPENAI_KEY,
     formDataCtor: CustomFormData,
 })
 
@@ -75,7 +75,7 @@ const Recorder: React.FC = () => {
     const {
         recording, speaking, transcribing, transcript, pauseRecording, startRecording, stopRecording,
     } = useWhisper({
-        apiKey: "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",
+        apiKey: process.env.OPENAI_KEY,
         whisperConfig: { language: 'en', },
         // removeSilence: true,
     })
