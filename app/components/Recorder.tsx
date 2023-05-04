@@ -17,7 +17,7 @@ class CustomFormData extends FormData {
 }
 
 const configuration = new Configuration({
-    apiKey: "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",
+    apiKey: "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",
     formDataCtor: CustomFormData,
 })
 
@@ -32,14 +32,14 @@ Your replies would be concise and engaging, and only informative if relevant to 
 For each message from the user, generate a response that consists of three parts:
 - A reply to the message of the user and the conversation itself
 - Grammer corrections. Ignore capitalization, punctuations and spelling mistakes.
-- Feedback on the structure of the sentence, word choice or any idioms that could be put to use.
+- Feedback on the structure of the sentence and suggest any idioms that could be put to use.
 Limit the corrections and feedbacks to four items at most, selecting the most important ones if there are more than four.
 ALWAYS structure your responses in the following JSON format. Do not include any text outside of the JSON object.
 {
     "content": "YOUR reply to the conversation",
     "corrections": [
-        "correction 1 to my message",
-        "correction 2 to my message"
+        "correction 1 to user's message",
+        "correction 2 to user's message"
     ],
     "improvements": [
     ]
@@ -50,6 +50,24 @@ Avoid repeating yourself in both parts.
 The user's message you need to respond to:
 `
 
+const reminderPrompt: string = `
+    Just a reminder for your next responses:
+    The JSON format represents your reply to the user's message, and the corrections and improvements relate to the user's message, not yours.
+    ALWAYS answer in the following JSON format, and NEVER include text outside of the JSON object!
+    {
+        "content": "YOUR reply to the user's message",
+        "corrections": [
+        ],
+        "improvements": [
+            "improvement 1 to user's message",
+        ]
+    }
+
+    The message of the user you need to respond to:
+`
+
+let userMessageCounter: number = 0;
+
 const Recorder: React.FC = () => {
     // Initial Setup
     const initialRender = useRef(true);
@@ -57,15 +75,15 @@ const Recorder: React.FC = () => {
     const {
         recording, speaking, transcribing, transcript, pauseRecording, startRecording, stopRecording,
     } = useWhisper({
-        apiKey: "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",
+        apiKey: "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",
         whisperConfig: { language: 'en', },
-        removeSilence: true,
+        // removeSilence: true,
     })
     const { speak } = useSpeechSynthesis();
     const { messages, addMessage } = useChat();
 
     // Generate conversation for testing.
-    /* useEffect(() => {
+    useEffect(() => {
         addMessage({
             role: 'user',
             name: 'user',
@@ -142,7 +160,7 @@ const Recorder: React.FC = () => {
                 "Say: playing video games *and* watching movies instead of playing video games, watching movies"
             ]
         })
-    }, []) */
+    }, [])
 
     // Handle new recordings
     useEffect(() => {
@@ -152,13 +170,30 @@ const Recorder: React.FC = () => {
             return;
         }
 
-        console.log(transcript)
-
         // Ignore empty transcript
         if (!transcript || transcript.text == "" || transcript.text == undefined) {
             console.log("Empty transcript")
             return;
         }
+
+        userMessageCounter++;
+        
+        const contextContent = () => {
+            if (userMessageCounter === 1) {
+                return `${ prompt } "${ transcript.text }"`
+            } else if (userMessageCounter % 3 === 0) {
+                return `${ reminderPrompt } "${ transcript.text }"`
+            } else {
+                return `${ transcript.text }`
+            }
+        }
+        
+        // Add user message to context history
+        contextHistory.push({
+            role: 'user',
+            name: 'user',
+            content: contextContent(),
+        } as ChatCompletionRequestMessage)
 
         // Add user message to chat
         addMessage({
@@ -168,19 +203,13 @@ const Recorder: React.FC = () => {
             isUser: true,
         } as Message);
 
-        // Add user message to context history
-        contextHistory.push({
-            role: 'user',
-            name: 'user',
-            content: (messages.length === 0) ? `${ prompt } "${ transcript.text }"` : `The message: "${transcript.text}". Remember to answer in JSON`,
-        } as ChatCompletionRequestMessage)
-
         // Get response from GPT
         getResponse();
 
     }, [transcript])
 
     const getResponse = async () => {
+        console.log(contextHistory);
         return await openai.createChatCompletion({
             model: "gpt-3.5-turbo",
             messages: contextHistory,
@@ -190,8 +219,36 @@ const Recorder: React.FC = () => {
             .then((response) => {
                 // Parse response to JSON
                 try {
-                    console.log(response.data.choices[0].message.content)
-                    const parsedResponse = JSON.parse(response.data.choices[0].message.content);
+                    const rawResponse = response.data.choices[0].message.content;
+
+                    console.log(rawResponse);
+
+                    const jsonResponse = rawResponse.substring(
+                        rawResponse.indexOf('{'),
+                        rawResponse.lastIndexOf('}') + 1
+                    );
+
+                    if (jsonResponse == "")
+                    {
+                        contextHistory.push({
+                            role: 'user',
+                            name: 'you',
+                            content: rawResponse,
+                        } as ChatCompletionRequestMessage)
+
+                        addMessage({
+                            role: 'user',
+                            name: 'you',
+                            isUser: false,
+                            content: rawResponse,
+                        } as Message);
+
+                        speak({ text: rawResponse });
+
+                        return;
+                    }
+
+                    const parsedResponse = JSON.parse(jsonResponse);
                     
                     contextHistory.push({
                         role: 'user',
