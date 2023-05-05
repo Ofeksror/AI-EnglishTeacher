@@ -1,16 +1,14 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname  } from 'next/navigation';
-import React, { useEffect, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import styles from './Navbar.module.css';
 import { BsLightbulb } from 'react-icons/bs';
+import { MdQuestionMark, MdClose } from 'react-icons/md'
 
 const Navbar: React.FC = () => {
     const [darkTheme, setDarkTheme] = useState(true);
-
-    const [showDropdown, setShowDropdown] = useState(false);
-
+    
     const handleThemeSwitch = () => {
         setDarkTheme(!darkTheme);
         if (darkTheme) {
@@ -23,16 +21,32 @@ const Navbar: React.FC = () => {
         }
     }
 
-    return (
-        <nav className={styles.navbar}>
-            <div>
-                <span className={styles.homepageLink}>Created with 🤍 by <Link href='https://ofeksror.com'>Ofek Sror</Link></span>
+    const dialogElement = useRef(null);
 
-                <button className={styles.themeSwitcher} onClick={handleThemeSwitch}>
-                    < BsLightbulb />
-                </button>
-            </div>
-        </nav>
+    const openDialog = () => dialogElement.current.showModal();
+    const closeDialog = () => dialogElement.current.close();
+
+    return (
+        <>
+            <nav className={styles.navbar}>
+                <div>
+                    <span className={styles.homepageLink}>Created with 🤍 by <Link href='https://ofeksror.com'>Ofek Sror</Link></span>
+
+                    <button className={styles.modalButton} onClick={openDialog}>
+                        < MdQuestionMark />
+                    </button>
+
+                    <button className={styles.themeSwitcher} onClick={handleThemeSwitch}>
+                        < BsLightbulb />
+                    </button>
+                </div>
+            </nav>
+
+            <dialog ref={dialogElement}>
+                <button className={styles.modalCloseButton} onClick={closeDialog}><MdClose /></button>
+                <p>My dialog</p>
+            </dialog>
+        </>
   )
 }
 
