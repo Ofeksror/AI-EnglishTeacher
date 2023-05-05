@@ -32,19 +32,27 @@ const Navbar: React.FC = () => {
                 <div>
                     <span className={styles.homepageLink}>Created with 🤍 by <Link href='https://ofeksror.com'>Ofek Sror</Link></span>
 
-                    <button className={styles.modalButton} onClick={openDialog}>
-                        < MdQuestionMark />
-                    </button>
+                    <span>
+                        <button className={styles.modalButton} onClick={openDialog}>
+                            < MdQuestionMark />
+                        </button>
 
-                    <button className={styles.themeSwitcher} onClick={handleThemeSwitch}>
-                        < BsLightbulb />
-                    </button>
+                        <button className={styles.themeSwitcher} onClick={handleThemeSwitch}>
+                            < BsLightbulb />
+                        </button>
+                    </span>
                 </div>
             </nav>
 
-            <dialog ref={dialogElement}>
+            <dialog className={styles.modal} ref={dialogElement}>
                 <button className={styles.modalCloseButton} onClick={closeDialog}><MdClose /></button>
-                <p>My dialog</p>
+                <div>
+                    <p>This web-app is designed to enhance your English speaking skills through interactive AI-powered conversations!<br></br>
+                    As you chat with the AI, you will receive personalized feedback on your grammer and sentence structure, and suggestions to familiarize you with new words or idioms.<br></br>
+                    You will communicate by recording your voice, allowing you to practice your verbal skills.<br></br>
+                    We hope to provide an enriching and immersive experience to help you on your English journey!
+                    </p>
+                </div>
             </dialog>
         </>
   )

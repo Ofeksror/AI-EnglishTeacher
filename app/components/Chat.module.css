@@ -33,7 +33,7 @@
 
 .chatNote {
     display: block;
-    margin: -0.75em auto 0em auto;
+    margin: -0.75em auto 1em auto;
     width: fit-content;
     max-width: 55%;
     border-radius: 1em;
