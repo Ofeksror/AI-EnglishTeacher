@@ -12,7 +12,6 @@
     "@chengsokdara/use-whisper": "^0.2.0",
     "@ffmpeg/core": "^0.11.0",
     "@ffmpeg/ffmpeg": "^0.11.6",
-    "@types/node": "18.15.11",
     "@types/react": "18.0.35",
     "@types/react-dom": "18.0.11",
     "axios": "^1.4.0",
@@ -31,6 +30,7 @@
     "typescript": "5.0.4"
   },
   "devDependencies": {
-    "@types/ffmpeg": "^1.0.4"
+    "@types/ffmpeg": "^1.0.4",
+    "@types/node": "^18.16.3"
   }
 }

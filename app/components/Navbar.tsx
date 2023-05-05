@@ -11,6 +11,9 @@ const Navbar: React.FC = () => {
 
     const [showDropdown, setShowDropdown] = useState(false);
 
+    const apiKey = process.env.OPENAI_KEY;
+    console.log({apiKey})
+
     const handleThemeSwitch = () => {
         setDarkTheme(!darkTheme);
         if (darkTheme) {
