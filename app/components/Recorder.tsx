@@ -3,8 +3,6 @@ import useWhisper from '@chengsokdara/use-whisper';
 import { useEffect, useRef, useState } from 'react';
 import { Message, useChat } from '../context/ChatContext';
 import { ChatCompletionRequestMessage, Configuration, OpenAIApi } from 'openai';
-import { useSpeechSynthesis } from 'react-speech-kit';
-
 import styles from './Recorder.module.css';
 import { BiMicrophone, BiStop, BiPause } from 'react-icons/bi';
 
@@ -17,7 +15,7 @@ class CustomFormData extends FormData {
 }
 
 const configuration = new Configuration({
-    apiKey: process.env.OPENAI_KEY,
+    apiKey: "process.env.OPENAI_KEY",
     formDataCtor: CustomFormData,
 })
 
@@ -75,14 +73,13 @@ const Recorder: React.FC = () => {
     const {
         recording, speaking, transcribing, transcript, pauseRecording, startRecording, stopRecording,
     } = useWhisper({
-        apiKey: process.env.OPENAI_KEY,
+        apiKey: "process.env.OPENAI_KEY",
         whisperConfig: { language: 'en', },
         // removeSilence: true,
     })
-    const { speak } = useSpeechSynthesis();
     const { messages, addMessage } = useChat();
 
-    /*
+    
     // Generate conversation for testing.
     useEffect(() => {
         addMessage({
@@ -162,7 +159,7 @@ const Recorder: React.FC = () => {
             ]
         })
     }, [])
-    */
+    
 
     // Handle new recordings
     useEffect(() => {
@@ -244,8 +241,6 @@ const Recorder: React.FC = () => {
                             isUser: false,
                             content: rawResponse,
                         } as Message);
-
-                        speak({ text: rawResponse });
 
                         return;
                     }

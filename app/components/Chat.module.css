@@ -22,7 +22,10 @@
 }
 
 .chatMessage {
-    display: block;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
     margin: 1.25em auto;
     width: fit-content;
     max-width: 55%;
@@ -52,7 +55,7 @@
 .left {
     margin-left: 2em;
     background-color: var(--accentTheme);
-    padding: .2em 2.5em .2em 1.5em;
+    padding: .2em 1.25em .2em 1.5em;
 }
 
 .listHeader {
@@ -76,4 +79,38 @@
     color: var(--text);
     position: relative;
     left: 0.5em;
+}
+
+.chatMessage div {
+    flex-grow: 1;
+}
+
+.speakingButton {
+    all: unset;
+    cursor: pointer;
+    visibility: hidden;
+    display: inline-flex;
+    height: fit-content;
+    flex: 1;
+    /* margin-left: auto;
+    margin-right: 0; */
+    /* margin-bottom: 0em; */
+    margin-left: 1em;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    color: var(--text);
+    background-color: var(--sub);
+    font-size: 1em;
+    padding: 0.3em;
+
+    transform: scale(0.3);
+    transition: transform 100ms cubic-bezier(0.1, 0.2, 0.3, 1);
+}
+
+.chatMessage:hover .speakingButton {
+    visibility: visible;
+
+    font-size: 1em;
+    transform: scale(1);
 }
