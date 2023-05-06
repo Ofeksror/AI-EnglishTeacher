@@ -260,8 +260,6 @@ const Recorder: React.FC = () => {
                         isUser: false,
                         ...parsedResponse
                     } as Message);
-
-                    speak({ text: parsedResponse.content });
                 } catch (err) {
                     console.error(`ERROR: ${err}`);
                     return;
