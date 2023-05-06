@@ -45,7 +45,7 @@ const Chat: React.FC = () => {
                             <>
                                 <div className={`${styles.chatMessage} ${styles.left}`} key={index + "gpt"}>
                                     <p>{message.content}</p>
-                                    <button className={styles.speakingButton} onClick={
+                                    <button className={(index.toString() == currentlyPlaying) ? styles.pauseButton : styles.speakingButton} onClick={
                                         () => {
                                             if (index.toString() == currentlyPlaying) {
                                                 cancel();
@@ -71,7 +71,7 @@ const Chat: React.FC = () => {
                                                 }
                                             </ul>
                                         </div>
-                                        <button className={styles.speakingButton} onClick={
+                                        <button className={(index.toString() + "crct" == currentlyPlaying) ? styles.pauseButton : styles.speakingButton} onClick={
                                             () => {
                                                 if ((index.toString() + "crct") == currentlyPlaying) {
                                                     cancel();
@@ -98,7 +98,7 @@ const Chat: React.FC = () => {
                                                     }
                                             </ul>
                                         </div>
-                                        <button className={styles.speakingButton} onClick={
+                                        <button className={(index.toString() + "impr" == currentlyPlaying) ? styles.pauseButton : styles.speakingButton} onClick={
                                             () => {
                                                 if ((index.toString() + "impr") == currentlyPlaying) {
                                                     cancel();
