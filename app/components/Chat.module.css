@@ -149,6 +149,7 @@
 @media (max-width: 60em) {
     .chatContainer {
         width: 100%;
+        height: 50vh;
         font-size: 0.9em;
     }
 
