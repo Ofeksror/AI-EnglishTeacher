@@ -32,7 +32,7 @@ const Navbar: React.FC = () => {
                 <div>
                     <span className={styles.homepageLink}>Created with 🤍 by <Link href='https://ofeksror.com'>Ofek Sror</Link></span>
 
-                    <span>
+                    <span className={styles.buttons}>
                         <button className={styles.modalButton} onClick={openDialog}>
                             < MdQuestionMark />
                         </button>

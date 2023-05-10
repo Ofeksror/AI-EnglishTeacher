@@ -79,8 +79,9 @@ const Recorder: React.FC = () => {
     })
     const { messages, addMessage } = useChat();
 
-    /*
+    
     // Generate conversation for testing.
+    /*
     useEffect(() => {
         addMessage({
             role: 'user',
@@ -160,7 +161,7 @@ const Recorder: React.FC = () => {
         })
     }, [])
     */
-    
+
 
     // Handle new recordings
     useEffect(() => {

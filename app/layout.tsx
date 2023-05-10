@@ -4,8 +4,8 @@ import ChatContextProvider from './context/ChatContext'
 import { Open_Sans } from 'next/font/google'
 
 export const metadata = {
-  title: 'Homepage',
-  description: 'Description',
+  title: 'AI English Coach | Ofek Sror',
+  description: 'A web-app designed to help you improve your English skills through interactive AI-powered conversations!',
 }
 
 const openSans = Open_Sans({ subsets: ['latin'] });
