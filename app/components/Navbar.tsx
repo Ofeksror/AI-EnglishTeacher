@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import styles from './Navbar.module.css';
 import { BsLightbulb } from 'react-icons/bs';
 import { MdQuestionMark, MdClose } from 'react-icons/md'
