@@ -25,7 +25,13 @@ const Navbar: React.FC = () => {
 
     const openDialog = () => dialogElement.current.showModal();
     const closeDialog = () => dialogElement.current.close();
-
+    
+    useEffect(() => {
+        if (dialogElement == null)
+            return;
+        openDialog();
+    }, [dialogElement]);
+    
     return (
         <>
             <nav className={styles.navbar}>
